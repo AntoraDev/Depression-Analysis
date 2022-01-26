@@ -1,0 +1,20 @@
+close all;
+clc;
+
+[ALLEEG EEG CURRENTSET ALLCOM] = eeglab;
+EEG = pop_loadset('filename','sample 1.set','filepath','C:\Users\USER\Desktop\research\');
+[ALLEEG, EEG, CURRENTSET] = eeg_store( ALLEEG, EEG, 0 );
+EEG = eeg_checkset( EEG );
+i = 1;
+temp = EEG.times(:,:);
+y = dot(size(temp),[1,1])-1;
+n = y/256;
+N = 256*ones(1,n);
+segmented_times = mat2cell(EEG.times, [1] , [N] );
+segmented_data = mat2cell(EEG.data, [19] , [N] );
+celldisp(segmented_times);
+
+rowNames = { 'Times'; 'Fp1'; 'F3';	'C3';	'P3';	'O1';	'F7';	'T3';	'T5';	'Fz';	'Fp2';	'F4';	'C4';	'P4';	'O2';	'F8';	'T4';	'T6';	'Cz';	'Pz';};
+T = table( segmented_times {1}, segmented_data{1}, 'RowNames', rowNames);
+writetable(T,'C:\Users\USER\Desktop\research\tabledata.dat', 'WriteRowNames', true);
+type tabledata.dat
